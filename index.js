@@ -1,40 +1,40 @@
-const express = require('express');
-const Chemical = require('chemicaljs');
-const app = express();
-const PORT = process.env.PORT || 3000;
+import { ChemicalServer } from "chemicaljs";
+import express from "express";
+import { execSync } from "node:child_process";
+import fs from "node:fs";
 
-app.use(express.json());
+if (!fs.existsSync("dist")) {
+    console.log("No build folder found. Building...");
+    execSync("pnpm run build");
+    console.log("Built!");
+}
 
-// Proxy route
-app.get('/proxy', async (req, res) => {
-    const targetUrl = req.query.url;
-    if (!targetUrl) {
-        return res.status(400).send('URL is required');
-    }
-
-    try {
-        console.log(`Proxying request to URL: ${targetUrl}`);
-
-        const chemical = new Chemical(targetUrl, {
-            headers: req.headers,
-            method: req.method,
-        });
-
-        const response = await chemical.run();
-        const contentType = response.headers['content-type'];
-        
-        if (contentType) {
-            res.setHeader('Content-Type', contentType);
-        }
-
-        response.body.pipe(res);
-    } catch (error) {
-        console.error(`Error fetching the URL: ${error.message}`);
-        res.status(500).send('Error fetching the URL');
-    }
+const chemical = new ChemicalServer({
+    scramjet: false,
+    rammerhead: false,
 });
 
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Serve static files from the "dist" directory
+app.use(
+    express.static("dist", {
+        index: "index.html",
+        extensions: ["html"],
+    })
+);
+
+// Handle 404 errors with a custom error page
+app.use((req, res) => {
+    res.status(404);
+    res.sendFile("dist/index.html", { root: "." });
+});
+
+// Use the ChemicalServer middleware
+app.use(chemical.middleware());
+
 // Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
 });
