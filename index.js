@@ -2,15 +2,12 @@ const express = require('express');
 const Chemical = require('chemicaljs');
 const cheerio = require('cheerio');
 const compression = require('compression');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(compression()); // Compress all responses
+// Use compression middleware
+app.use(compression());
 
-// Serve static files if you have any (e.g., for the frontend)
-app.use(express.static('public'));
-
+// Proxy route
 app.use('/proxy', async (req, res) => {
     try {
         const targetUrl = req.query.url;
@@ -60,6 +57,7 @@ app.use('/proxy', async (req, res) => {
 });
 
 // Start the server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Proxy site running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
