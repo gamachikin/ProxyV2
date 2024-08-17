@@ -1,0 +1,35 @@
+{
+  "name": "chemicaljs-proxy-site",
+  "version": "1.0.0",
+  "description": "A proxy site using ChemicalJS, Express, and Node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "chemicaljs": "^1.0.0",  // Update to the latest version if available
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "cheerio": "^1.0.0-rc.10"  // For HTML parsing and URL rewriting
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"  // For automatic server restarts during development
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/chemicaljs-proxy-site.git"
+  },
+  "keywords": [
+    "proxy",
+    "chemicaljs",
+    "express",
+    "nodejs",
+    "vercel"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
