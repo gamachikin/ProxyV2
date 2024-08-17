@@ -1,24 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="This is an example project for Chemical.">
-    <title>Chemical Example</title>
-    <link rel="stylesheet" href="/style.css">
-    <script src="/chemical.js"></script>
-    <script src="/chemical.components.js"></script>
-</head>
-<body>
-    <h1>Chemical Example</h1>
-    <p>Create your own using <a href="https://github.com/chemicaljs/chemical">Chemical!</a></p>
-    <input autofocus spellcheck="false" autocomplete="off" id="search" frame="web" placeholder="Enter a URL" is="chemical-input">
-    <section id="controls" is="chemical-controls">
-        <button onclick="chemicalAction('back', 'web')">Back</button>
-        <button onclick="chemicalAction('forward', 'web')">Forward</button>
-        <button onclick="chemicalAction('reload', 'web')">Reload</button>
-        <button onclick="chemicalAction('close', 'web')">Close</button>
-    </section>
-    <iframe id="web" controls="controls" is="chemical-iframe"></iframe>
-</body>
-</html>
+<h1>Chemical Example</h1>
+
+<p>Open on click</p>
+<a href="https://example.com" is="chemical-link">Example Link</a>
+<style>
+    a {
+        color: blue;
+        text-decoration: underline;
+    }
+
+    a[data-chemical-loading="true"] {
+        cursor: wait;
+    }
+</style>
+<p>Open in current tab</p>
+<input target="_self" placeholder="Enter URL" is="chemical-input">
+<p>Open in new tab</p>
+<input target="_blank" placeholder="Enter URL" is="chemical-input">
+<p>Custom action (console log)</p>
+<input action="logURL" placeholder="Enter URL" is="chemical-input">
+<script>
+    function logURL(url) {
+        console.log(url)
+    }
+</script>
+<p>With button</p>
+<input id="my-input" target="_blank" placeholder="Enter URL" is="chemical-input">
+<button for="my-input" is="chemical-button">Go!</button>
+<p>With iframe</p>
+<input frame="my-iframe" placeholder="Enter URL" is="chemical-input">
+<br>
+<iframe id="my-iframe" is="chemical-iframe"></iframe>
+<p>With iframe and controls</p>
+<input frame="my-iframe-2" placeholder="Enter URL" is="chemical-input">
+<section id="my-controls-2" is="chemical-controls">
+    <button onclick="chemicalAction('back', 'my-iframe-2')">←</button>
+    <button onclick="chemicalAction('forward', 'my-iframe-2')">→</button>
+    <button onclick="chemicalAction('reload', 'my-iframe-2')">⟳</button>
+    <button onclick="chemicalAction('close', 'my-iframe-2')">🗙</button>
+</section>
+<br>
+<iframe controls="my-controls-2" id="my-iframe-2" is="chemical-iframe"></iframe>
+
+<script src="/chemical.js"></script>
+<script src="/chemical.components.js"></script>
