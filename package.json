@@ -1,14 +1,15 @@
 {
   "name": "chemicaljs-proxy-server",
   "version": "1.0.0",
-  "description": "A proxy server using ChemicalJS and Express",
+  "description": "A simple proxy server using ChemicalJS and Express",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "chemicaljs": "^1.0.0",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "cheerio": "^1.0.0-rc.10"
   },
   "engines": {
     "node": ">=14.x"
