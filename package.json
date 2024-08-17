@@ -4,8 +4,7 @@
   "description": "A proxy server using ChemicalJS and Express",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "echo 'No build step required for this project.'"
+    "start": "node index.js"
   },
   "dependencies": {
     "chemicaljs": "^1.0.0",
@@ -13,5 +12,6 @@
   },
   "engines": {
     "node": ">=14.x"
-  }
+  },
+  "type": "module"
 }
