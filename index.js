@@ -11,14 +11,13 @@ app.use(compression()); // Compress all responses
 // Serve static files if you have any (e.g., for the frontend)
 app.use(express.static('public'));
 
-// Proxy route with debugging logs
 app.use('/proxy', async (req, res) => {
     try {
         const targetUrl = req.query.url;
-        console.log(`Proxying URL: ${targetUrl}`);  // Debugging log for the target URL
+        console.log(`Proxying URL: ${targetUrl}`);
 
         if (!targetUrl) {
-            return res.status(400).send('Missing URL parameter');  // Handle missing URL parameter
+            return res.status(400).send('Missing URL parameter');
         }
 
         const chemical = new Chemical(targetUrl, {
@@ -27,9 +26,12 @@ app.use('/proxy', async (req, res) => {
         });
 
         const response = await chemical.run();
-        console.log(`Response Status: ${response.status}`);  // Debugging log for the response status
+        const contentType = response.headers['content-type'];
 
-        if (response.headers['content-type'].includes('text/html')) {
+        console.log(`Response Status: ${response.status}`);
+        console.log(`Content-Type: ${contentType}`);
+
+        if (contentType.includes('text/html')) {
             const body = await response.text();
             const $ = cheerio.load(body);
 
@@ -40,17 +42,19 @@ app.use('/proxy', async (req, res) => {
 
                 if (url && !url.startsWith('http')) {
                     const rewrittenUrl = `/proxy?url=${encodeURIComponent(new URL(url, targetUrl).href)}`;
-                    console.log(`Rewriting ${attr} to: ${rewrittenUrl}`);  // Debugging log for rewritten URLs
+                    console.log(`Rewriting ${attr} to: ${rewrittenUrl}`);
                     $el.attr(attr, rewrittenUrl);
                 }
             });
 
             res.send($.html());
-        } else {
+        } else if (contentType.includes('image') || contentType.includes('video') || contentType.includes('audio')) {
             response.pipe(res);
+        } else {
+            res.status(415).send('Unsupported content type');
         }
     } catch (error) {
-        console.error(`Error proxying URL: ${req.query.url}`, error);  // Debugging log for errors
+        console.error(`Error proxying URL: ${req.query.url}`, error);
         res.status(500).send('Something went wrong!');
     }
 });
