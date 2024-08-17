@@ -1,21 +1,19 @@
 const express = require('express');
 const Chemical = require('chemicaljs');
-const cheerio = require('cheerio');
-const compression = require('compression');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Use compression middleware
-app.use(compression());
+app.use(express.json());
 
 // Proxy route
-app.use('/proxy', async (req, res) => {
-    try {
-        const targetUrl = req.query.url;
-        console.log(`Proxying URL: ${targetUrl}`);
+app.get('/proxy', async (req, res) => {
+    const targetUrl = req.query.url;
+    if (!targetUrl) {
+        return res.status(400).send('URL is required');
+    }
 
-        if (!targetUrl) {
-            return res.status(400).send('Missing URL parameter');
-        }
+    try {
+        console.log(`Proxying request to URL: ${targetUrl}`);
 
         const chemical = new Chemical(targetUrl, {
             headers: req.headers,
@@ -24,40 +22,19 @@ app.use('/proxy', async (req, res) => {
 
         const response = await chemical.run();
         const contentType = response.headers['content-type'];
-
-        console.log(`Response Status: ${response.status}`);
-        console.log(`Content-Type: ${contentType}`);
-
-        if (contentType.includes('text/html')) {
-            const body = await response.text();
-            const $ = cheerio.load(body);
-
-            $('a, link, script, img').each((i, el) => {
-                const $el = $(el);
-                const attr = $el.is('a, link') ? 'href' : 'src';
-                const url = $el.attr(attr);
-
-                if (url && !url.startsWith('http')) {
-                    const rewrittenUrl = `/proxy?url=${encodeURIComponent(new URL(url, targetUrl).href)}`;
-                    console.log(`Rewriting ${attr} to: ${rewrittenUrl}`);
-                    $el.attr(attr, rewrittenUrl);
-                }
-            });
-
-            res.send($.html());
-        } else if (contentType.includes('image') || contentType.includes('video') || contentType.includes('audio')) {
-            response.pipe(res);
-        } else {
-            res.status(415).send('Unsupported content type');
+        
+        if (contentType) {
+            res.setHeader('Content-Type', contentType);
         }
+
+        response.body.pipe(res);
     } catch (error) {
-        console.error(`Error proxying URL: ${req.query.url}`, error);
-        res.status(500).send('Something went wrong!');
+        console.error(`Error fetching the URL: ${error.message}`);
+        res.status(500).send('Error fetching the URL');
     }
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
