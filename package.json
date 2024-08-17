@@ -8,28 +8,15 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
-    "chemicaljs": "^1.0.0",  // Update to the latest version if available
+    "chemicaljs": "^1.0.0",
     "compression": "^1.7.4",
     "express": "^4.18.2",
-    "cheerio": "^1.0.0-rc.10"  // For HTML parsing and URL rewriting
+    "cheerio": "^1.0.0-rc.10"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"  // For automatic server restarts during development
+    "nodemon": "^2.0.22"
   },
   "engines": {
     "node": ">=14.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/chemicaljs-proxy-site.git"
-  },
-  "keywords": [
-    "proxy",
-    "chemicaljs",
-    "express",
-    "nodejs",
-    "vercel"
-  ],
-  "author": "Your Name",
-  "license": "MIT"
+  }
 }
