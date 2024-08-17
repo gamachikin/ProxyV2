@@ -1,9 +1,17 @@
 import express from "express";
+import path from "path";
 import { ChemicalServer } from "chemicaljs";
 import cheerio from "cheerio";
+import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(process.cwd(), 'static')));
 
 // Initialize ChemicalServer
 const chemical = new ChemicalServer({
@@ -48,7 +56,24 @@ app.get('/proxy', async (req, res) => {
     }
 });
 
+// Static file serving for other routes
+const routes = [
+    { path: '/', file: 'index.html' },
+    // Add more routes as needed
+];
+
+routes.forEach((route) => {
+    app.get(route.path, (req, res) => {
+        res.sendFile(path.join(process.cwd(), 'static', route.file));
+    });
+});
+
+// Custom 404 handling
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(process.cwd(), 'static', '404.html'));
+});
+
 // Start the server
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
 });
