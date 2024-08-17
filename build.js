@@ -4,7 +4,7 @@ const build = new ChemicalBuild({
     path: "dist",
     default: "uv",
     uv: true,
-    scramjet: true,
+    scramjet: false,
     rammerhead: false,
 });
 
