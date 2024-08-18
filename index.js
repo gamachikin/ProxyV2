@@ -1,10 +1,12 @@
 import { ChemicalServer } from "chemicaljs";
 import express from "express";
+import path from "path";
 
 const chemical = new ChemicalServer();
 const port = process.env.PORT || 3000;
 
-chemical.use(express.static("public", {
+// Serve static files from the 'dist' directory
+chemical.use(express.static(path.join(__dirname, "dist"), {
     index: "index.html",
     extensions: ["html"]
 }));
