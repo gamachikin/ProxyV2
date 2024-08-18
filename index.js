@@ -5,8 +5,8 @@ import path from "path";
 const chemical = new ChemicalServer();
 const port = process.env.PORT || 3000;
 
-// Serve static files from the 'dist' directory
-chemical.use(express.static(path.join(__dirname, "dist"), {
+// Serve static files from the 'public' directory
+chemical.use(express.static(path.join(__dirname, "public"), {
     index: "index.html",
     extensions: ["html"]
 }));
