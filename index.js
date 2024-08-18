@@ -1,21 +1,16 @@
 import { ChemicalServer } from "chemicaljs";
 import express from "express";
-import path from "path";
 
-const chemical = new ChemicalServer();
+const chemical = new ChemicalServer({
+    rammerhead: false,
+});
 const port = process.env.PORT || 3000;
 
-// Serve static files from the 'public' directory
-chemical.use(express.static(path.join(__dirname, "public"), {
+chemical.use(express.static("public", {
     index: "index.html",
     extensions: ["html"]
 }));
 
-chemical.error((req, res) => {
-    res.status(404);
-    res.send("404 Error");
-});
-
 chemical.listen(port, () => {
-    console.log(`Chemical example listening on port ${port}`);
+    console.log(`Chemical example build listening on port ${port}`);
 });
