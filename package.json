@@ -8,6 +8,16 @@
     "start": "node index.js",
     "build": "node build.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chemicaljs/chemical.git"
+  },
+  "author": "Nebelung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chemicaljs/chemical/issues"
+  },
+  "homepage": "https://github.com/chemicaljs/chemical#readme",
   "dependencies": {
     "chemicaljs": "^1.6.5",
     "express": "^4.19.2"
